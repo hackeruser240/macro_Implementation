@@ -1,0 +1,34 @@
+my Ms word document has the following format. Below, for demonstration, I have just added two sections (they are divided by the "=======" symbol. I have approx. 50 something such sections. 
+
+"
+Question:1
+
+Paragraph 1....
+
+Option 1
+Option 2
+Option 3
+Option 4
+
+Answer: B
+
+Explanation: paragraph 1.1.1.1.
+
+====== 
+
+Question:2
+
+Paragraph 1....
+
+Option 1
+Option 2
+Option 3
+Option 4
+
+Answer: B
+
+Explanation: paragraph 1.1.1.1.
+
+"
+
+i have designed a macro that changes the applies format to each section. But when i run the macro, the macro only applies to one section, rather than ALL the sections. What is going wring here? I am attaching the macro i am using. feel free to analyze it and respond with some useful comments.
