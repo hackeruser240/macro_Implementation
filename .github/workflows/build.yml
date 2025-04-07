@@ -1,0 +1,40 @@
+name: Build EXE
+
+on:
+  push:
+    branches: [ main ] 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12' # Or your python version
+
+      - name: Install dependencies
+        run: pip install pyinstaller
+
+      - name: Build EXE
+        run: pyinstaller --onefile CodeGUI.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDFdownloader-exe
+          path: dist/CodeGUI.exe
+
+      # Push the .exe back to the repo
+      - name: Upload EXE to Repo
+        run: |
+          git config --global user.name "hackeruser240"
+          git config --global user.email "afaqahmad240@yahoo.com"
+          git add dist/CodeGUI.exe  # Path to your built .exe
+          git commit -m "Add latest build"
+          git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
