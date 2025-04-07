@@ -1,9 +1,10 @@
-name: Build EXE
+name: Build and Release EXE
 
 on:
   push:
-    branches: [ master ] 
-  workflow_dispatch:
+    tags:        # Trigger only on tags (e.g., v1.0.0)
+      - 'v*.*.*'
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build:
@@ -12,6 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for getting all tags
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -24,8 +27,35 @@ jobs:
       - name: Build EXE
         run: pyinstaller --onefile CodeGUI.py
 
-      - name: Upload EXE
+      - name: Upload EXE as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PDFdownloader-exe
+          name: CodeGUI-exe
           path: dist/CodeGUI.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest  # Use Ubuntu for release creation (more versatile)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for getting all tags
+
+      - name: Download EXE artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeGUI-exe
+          path: dist/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/CodeGUI.exe
+          tag_name: ${{ github.ref_name }} # Use the tag name
+          name: Release ${{ github.ref_name }}
+          body: |
+            This release contains the CodeGUI executable.  # Release notes
+            # Add more detailed release notes here!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
