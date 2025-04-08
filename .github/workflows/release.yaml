@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*'      # Trigger only on version tags like v1.0.0
-    branches:
-      - master        # Only run if the tag is pushed from master branch
 
 permissions:
   contents: write      # Needed for creating releases
