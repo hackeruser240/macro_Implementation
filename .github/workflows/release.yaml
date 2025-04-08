@@ -1,0 +1,45 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'      # Trigger only on version tags like v1.0.0
+    branches:
+      - master        # Only run if the tag is pushed from master branch
+
+permissions:
+  contents: write      # Needed for creating releases
+
+jobs:
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeGUI-exe
+          path: dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: dist/CodeGUI.exe
+          name: Release ${{ github.ref_name }}
+          body: |
+            🎉 Initial EXE Release!
+
+            This release contains the compiled Windows `.exe` of CodeGUI.py.
+
+            ✅ Built from the `master` branch.
+          
+            🏷️ Tag: `${{ github.ref_name }}`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,34 @@
+name: Build EXE
+
+on:
+  push:
+    branches:
+      - master        # Only run if the push is to master branch
+  workflow_dispatch:   # Optional: allow manual triggering
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important to fetch all commits and tags
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyinstaller
+
+      - name: Build EXE
+        run: pyinstaller --onefile CodeGUI.py
+
+      - name: Upload EXE as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeGUI-exe
+          path: dist/CodeGUI.exe
