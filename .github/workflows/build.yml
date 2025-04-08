@@ -1,13 +1,15 @@
 name: Build and Release EXE
-permissions:
-  contents: write
-
 
 on:
   push:
-    tags:        # Trigger only on tags (e.g., v1.0.0)
-      - 'v*.*.*'
-  workflow_dispatch: # Allow manual triggering
+    tags:
+      - 'v*.*.*'      # Trigger only on version tags like v1.0.0
+    branches:
+      - master        # Only run if the tag is pushed from master branch
+  workflow_dispatch:   # Optional: allow manual triggering
+
+permissions:
+  contents: write      # Needed for creating releases
 
 jobs:
   build:
@@ -17,12 +19,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Important for getting all tags
+          fetch-depth: 0  # Important to fetch all commits and tags
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12' # Or your python version
+          python-version: '3.12'
 
       - name: Install dependencies
         run: pip install pyinstaller
@@ -38,12 +40,13 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-latest  # Use Ubuntu for release creation (more versatile)
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Important for getting all tags
+          fetch-depth: 0
 
       - name: Download EXE artifact
         uses: actions/download-artifact@v4
@@ -51,14 +54,17 @@ jobs:
           name: CodeGUI-exe
           path: dist/
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/CodeGUI.exe
-          tag_name: ${{ github.ref_name }} # Use the tag name
+          tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           body: |
-            This release contains the CodeGUI executable.  # Release notes
-            # Add more detailed release notes here!
+            🎉 Initial EXE Release!
+            
+            This release contains the compiled Windows `.exe` of CodeGUI.py.
+
+            ✅ Built from the `master` branch.
+            🏷️ Tag: `${{ github.ref_name }}`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
