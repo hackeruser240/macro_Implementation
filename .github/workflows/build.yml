@@ -1,4 +1,7 @@
 name: Build and Release EXE
+permissions:
+  contents: write
+
 
 on:
   push:
