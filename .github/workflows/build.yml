@@ -44,20 +44,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Download EXE artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: CodeGUI-exe
-          path: dist/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
+          files: dist/CodeGUI.exe
           name: Release ${{ github.ref_name }}
           body: |
             🎉 Initial EXE Release!
