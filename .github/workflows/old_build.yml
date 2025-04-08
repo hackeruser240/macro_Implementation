@@ -1,12 +1,8 @@
 name: Build and Release EXE
 
+
 on:
-  push:
-    tags:
-      - 'v*.*.*'      # Trigger only on version tags like v1.0.0
-    branches:
-      - master        # Only run if the tag is pushed from master branch
-  workflow_dispatch:   # Optional: allow manual triggering
+  workflow_dispatch:
 
 permissions:
   contents: write      # Needed for creating releases
