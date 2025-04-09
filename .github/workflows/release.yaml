@@ -16,6 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check EXE file exists
+        run: |
+          ls -R dist/
+      
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
