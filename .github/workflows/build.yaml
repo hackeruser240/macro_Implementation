@@ -32,3 +32,7 @@ jobs:
         with:
           name: CodeGUI-exe
           path: dist/CodeGUI.exe
+
+      - name: Check EXE file exists
+        run: |
+            ls -R dist/
