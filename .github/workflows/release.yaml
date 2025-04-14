@@ -16,6 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Show before downloading
+        run: |
+          echo "Looking in dist/"
+          ls -l dist/
+          echo "Looking deeper"
+          find dist/
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
