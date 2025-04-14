@@ -2,34 +2,34 @@ name: Create Release
 
 on:
   push:
-    tags: [ 'v*' ]  # Only runs on version tags (v1, v2, etc.)
+    tags: [ 'v*' ]
 
 permissions:
-  contents: write  # Needed for releases
+  contents: write
 
 jobs:
   release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      
-      # Download the EXE from the latest build
-      - uses: actions/download-artifact@v4
+      - name: Download Artifact
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: CodeGUI-exe
-          path: dist/  # Places it in dist/CodeGUI.exe
-
-      # Verify the file exists
-      - run: ls -R dist/
-
-      # Create the release
-      - uses: softprops/action-gh-release@v1
+          workflow: build.yml
+          name: codegui-exe
+          path: dist/
+          
+      - name: Verify EXE
+        run: |
+          ls -la dist/
+          if [ ! -f "dist/CodeGUI.exe" ]; then
+            echo "Error: EXE file not found!"
+            exit 1
+          fi
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
           files: dist/CodeGUI.exe
-          name: Release ${{ github.ref_name }}
-          body: |
-            🎉 Release ${{ github.ref_name }}!
-            This contains the compiled CodeGUI.exe.
+          tag_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

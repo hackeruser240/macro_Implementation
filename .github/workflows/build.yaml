@@ -2,7 +2,7 @@ name: Build EXE
 
 on:
   push:
-    branches: [ master ]  # Only runs on master push
+    branches: [ master ]
 
 jobs:
   build:
@@ -14,7 +14,8 @@ jobs:
           python-version: '3.12'
       - run: pip install pyinstaller
       - run: pyinstaller --onefile CodeGUI.py
-      - uses: actions/upload-artifact@v4  # Uploads EXE for later
+      - uses: actions/upload-artifact@v4
         with:
-          name: CodeGUI-exe
+          name: codegui-exe
           path: dist/CodeGUI.exe
+          retention-days: 1  # Keeps artifact available for release
