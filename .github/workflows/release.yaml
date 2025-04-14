@@ -2,45 +2,34 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'      # Trigger only on version tags like v1.0.0
+    tags: [ 'v*' ]  # Only runs on version tags (v1, v2, etc.)
 
 permissions:
-  contents: write      # Needed for creating releases
+  contents: write  # Needed for releases
 
 jobs:
   release:
     runs-on: windows-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+      
+      # Download the EXE from the latest build
+      - uses: actions/download-artifact@v4
         with:
-          name: CodeGUI-exe   # Must match the name used in upload-artifact in build.yml
-          path: dist/         # Will save the artifact contents to this path
+          name: CodeGUI-exe
+          path: dist/  # Places it in dist/CodeGUI.exe
 
-      - name: Show downloaded contents
-        run: |
-          echo "Contents of dist/"
-          dir dist
-        
+      # Verify the file exists
+      - run: ls -R dist/
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      # Create the release
+      - uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           files: dist/CodeGUI.exe
           name: Release ${{ github.ref_name }}
           body: |
-            🎉 Initial EXE Release!
-
-            This release contains the compiled Windows `.exe` of CodeGUI.py.
-
-            ✅ Built from the `master` branch.
-          
-            🏷️ Tag: `${{ github.ref_name }}`
+            🎉 Release ${{ github.ref_name }}!
+            This contains the compiled CodeGUI.exe.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
