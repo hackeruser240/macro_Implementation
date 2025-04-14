@@ -1,3 +1,5 @@
+## Word Macro Implementation
+
 This script takes your manual MS Word Macro Code and applies it to any number of MS Word files using Python. Please follow the below checklist before starting the script:
 
 1. No formatting is applied in Word files
@@ -12,4 +14,5 @@ This script takes your manual MS Word Macro Code and applies it to any number of
 `python Code.py --path PATH`
 
 2. CodeGUI.py: This script is used to generate the EXE file. It can also be executed in the console using:
+
 `python CodeGUI.py`
