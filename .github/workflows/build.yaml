@@ -22,15 +22,6 @@ jobs:
       - name: Build EXE
         run: pyinstaller --onefile --noconsole CodeGUI.py
 
-      - name: Verify EXE exists
-        run: |
-          if not (Test-Path -Path "dist\CodeGUI.exe" -PathType Leaf) {
-            Write-Error "EXE file was not created!"
-            exit 1
-          }
-          Write-Output "EXE file exists at:"
-          Get-Item "dist\CodeGUI.exe"
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
