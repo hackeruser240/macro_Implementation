@@ -8,14 +8,32 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-      - run: pip install pyinstaller
-      - run: pyinstaller --onefile CodeGUI.py
-      - uses: actions/upload-artifact@v4
+
+      - name: Install dependencies
+        run: pip install pyinstaller
+
+      - name: Build EXE
+        run: pyinstaller --onefile --noconsole CodeGUI.py
+
+      - name: Verify EXE exists
+        run: |
+          if not (Test-Path -Path "dist\CodeGUI.exe" -PathType Leaf) {
+            Write-Error "EXE file was not created!"
+            exit 1
+          }
+          Write-Output "EXE file exists at:"
+          Get-Item "dist\CodeGUI.exe"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: codegui-exe
           path: dist/CodeGUI.exe
-          retention-days: 7  # Keep artifact available for a week
+          retention-days: 7

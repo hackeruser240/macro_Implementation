@@ -11,30 +11,30 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-      - name: Download Build Artifact
-        uses: dawidd6/action-download-artifact@v3
+      - name: Download artifact
+        id: download
+        uses: actions/download-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: build.yml
           name: codegui-exe
           path: dist/
-          run_id: latest  # Get the latest successful build
 
-      - name: Verify EXE Exists
+      - name: Verify download
         run: |
-          if [ ! -f "dist/CodeGUI.exe" ]; then
-            echo "::error::EXE file not found in dist/ directory!"
+          if not (Test-Path -Path "dist\CodeGUI.exe" -PathType Leaf) {
+            Write-Error "EXE file was not downloaded!"
+            Get-ChildItem -Recurse
             exit 1
-          fi
+          }
+          Write-Output "EXE file downloaded successfully:"
+          Get-Item "dist\CodeGUI.exe"
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Create release
+        uses: ncipollo/release-action@v1
         with:
-          files: dist/CodeGUI.exe
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          artifacts: "dist/CodeGUI.exe"
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: |
-            🚀 New Release ${{ github.ref_name }}
-            Built from the latest master branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            Version ${{ github.ref_name }}
+            Built from master branch
+          token: ${{ secrets.GITHUB_TOKEN }}
