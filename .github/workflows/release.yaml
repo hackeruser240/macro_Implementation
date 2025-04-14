@@ -9,32 +9,33 @@ permissions:
 
 jobs:
   release:
+    needs: build
     runs-on: windows-latest
+    
     steps:
-      - name: Download artifact
-        id: download
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: codegui-exe
           path: dist/
-
-      - name: Verify download
+          
+      - name: Verify downloaded EXE
+        shell: bash
         run: |
-          if not (Test-Path -Path "dist\CodeGUI.exe" -PathType Leaf) {
-            Write-Error "EXE file was not downloaded!"
-            Get-ChildItem -Recurse
+          if [ ! -f "dist/CodeGUI.exe" ]; then
+            echo "::error::Downloaded EXE file not found!"
+            ls -la dist/
             exit 1
-          }
-          Write-Output "EXE file downloaded successfully:"
-          Get-Item "dist\CodeGUI.exe"
-
-      - name: Create release
-        uses: ncipollo/release-action@v1
+          fi
+          echo "EXE file ready for release:"
+          ls -la dist/CodeGUI.exe
+          
+      - uses: softprops/action-gh-release@v1
         with:
-          artifacts: "dist/CodeGUI.exe"
-          tag: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          files: dist/CodeGUI.exe
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: |
             Version ${{ github.ref_name }}
             Built from master branch
-          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
