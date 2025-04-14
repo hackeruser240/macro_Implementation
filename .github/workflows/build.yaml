@@ -18,4 +18,4 @@ jobs:
         with:
           name: codegui-exe
           path: dist/CodeGUI.exe
-          retention-days: 1  # Keeps artifact available for release
+          retention-days: 7  # Keep artifact available for a week

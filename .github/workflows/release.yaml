@@ -11,25 +11,30 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-      - name: Download Artifact
+      - name: Download Build Artifact
         uses: dawidd6/action-download-artifact@v3
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: build.yml
           name: codegui-exe
           path: dist/
-          
-      - name: Verify EXE
+          run_id: latest  # Get the latest successful build
+
+      - name: Verify EXE Exists
         run: |
-          ls -la dist/
           if [ ! -f "dist/CodeGUI.exe" ]; then
-            echo "Error: EXE file not found!"
+            echo "::error::EXE file not found in dist/ directory!"
             exit 1
           fi
-          
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: dist/CodeGUI.exe
           tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            🚀 New Release ${{ github.ref_name }}
+            Built from the latest master branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
