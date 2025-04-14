@@ -8,10 +8,20 @@ permissions:
   contents: write
 
 jobs:
+  # First job - independent (no dependencies)
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get_tag.outputs.value }}
+    steps:
+      - name: Extract tag name
+        id: get_tag
+        run: echo "value=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+  # Second job - depends on prepare and downloads artifact
   release:
-    needs: build
+    needs: prepare
     runs-on: windows-latest
-    
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -32,10 +42,10 @@ jobs:
       - uses: softprops/action-gh-release@v1
         with:
           files: dist/CodeGUI.exe
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          name: Release ${{ needs.prepare.outputs.tag }}
           body: |
-            Version ${{ github.ref_name }}
+            Version ${{ needs.prepare.outputs.tag }}
             Built from master branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
