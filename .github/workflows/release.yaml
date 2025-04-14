@@ -16,10 +16,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check EXE file exists
-        run: |
-          ls -R dist/
-      
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeGUI-exe   # Must match the name used in upload-artifact in build.yml
+          path: dist/         # Will save the artifact contents to this path
+
+      - name: Check downloaded files
+        run: ls -R dist/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
