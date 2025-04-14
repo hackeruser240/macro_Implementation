@@ -20,7 +20,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: CodeGUI-exe   # Must match the name used in upload-artifact in build.yml
-          path: dist/         # Will save the artifact contents to this path
+          path: dist/CodeGUI.exe         # Will save the artifact contents to this path
 
       - name: Check downloaded files
         run: ls -R dist/
