@@ -1,0 +1,6 @@
+Checklist 
+
+1. No formatting is applied in Word files
+2. There is no macro in Word file before running the script.
+3. Check for '.docm' files. They should be in the folder
+4. Macro text file location is correct. Location: "..\TXT Files\Macro_DirectCertifyQA.txt"

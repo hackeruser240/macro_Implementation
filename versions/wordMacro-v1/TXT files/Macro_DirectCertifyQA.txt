@@ -1,0 +1,196 @@
+Sub DirectCertifyQA()
+
+'
+' DirectCertifyQA Macro - Fixed Count
+'
+'
+    Dim i As Integer
+
+    For i = 1 To 55  ' Loop 55 times
+
+        'Process "Question:" sections
+        Selection.Find.ClearFormatting
+        With Selection.Find
+            .Text = "Question: "
+            .Replacement.Text = ""
+            .Forward = True
+            .Wrap = wdFindContinue
+            .Format = False
+            .MatchCase = False
+            .MatchWholeWord = False
+            .MatchWildcards = False
+            .MatchSoundsLike = False
+            .MatchAllWordForms = False
+        End With
+
+        Selection.Find.Execute
+        If Selection.Find.Found Then
+            Selection.MoveLeft Unit:=wdCharacter, Count:=1
+            Selection.ParagraphFormat.Alignment = wdAlignParagraphCenter
+            ActiveDocument.Tables.Add Range:=Selection.Range, NumRows:=1, NumColumns:=1, DefaultTableBehavior:=wdWord9TableBehavior, AutoFitBehavior:=wdAutoFitFixed
+            With Selection.Tables(1)
+                If .Style <> "Table Grid" Then
+                    .Style = "Table Grid"
+                End If
+                .ApplyStyleHeadingRows = True
+                .ApplyStyleLastRow = False
+                .ApplyStyleFirstColumn = True
+                .ApplyStyleLastColumn = False
+                .ApplyStyleRowBands = True
+                .ApplyStyleColumnBands = False
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+            Selection.MoveDown Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Cut
+            Selection.MoveLeft Unit:=wdWord, Count:=1
+            Selection.MoveUp Unit:=wdParagraph, Count:=1
+            Selection.PasteAndFormat (wdPasteDefault)
+            Selection.TypeBackspace
+            Selection.MoveUp Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Color = -603914241
+            Selection.MoveRight Unit:=wdCharacter, Count:=1
+            With Selection.Tables(1)
+                With .Shading
+                    .Texture = wdTextureNone
+                    .ForegroundPatternColor = wdColorAutomatic
+                    .BackgroundPatternColor = -603946753
+                End With
+                With .Borders(wdBorderLeft)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderRight)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderTop)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderBottom)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+                .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+                .Borders.Shadow = False
+            End With
+            With Options
+                .DefaultBorderLineStyle = wdLineStyleThinThickSmallGap
+                .DefaultBorderLineWidth = wdLineWidth300pt
+                .DefaultBorderColor = -603914241
+            End With
+            Selection.Tables(1).Columns(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Tables(1).Columns(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.Range.Cells(1).VerticalAlignment = wdCellAlignVerticalCenter
+            Selection.Range.Cells(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Range.Cells(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.MoveRight Unit:=wdWord, Count:=2
+        End If 'End If Selection.Find.Found
+
+        'Process "Answer:" Sections
+        Selection.Find.ClearFormatting
+        With Selection.Find
+            .Text = "Answer: "
+            .Replacement.Text = ""
+            .Forward = True
+            .Wrap = wdFindContinue
+            .Format = False
+            .MatchCase = False
+            .MatchWholeWord = False
+            .MatchWildcards = False
+            .MatchSoundsLike = False
+            .MatchAllWordForms = False
+        End With
+
+        Selection.Find.Execute
+        If Selection.Find.Found Then
+            Selection.MoveLeft Unit:=wdCharacter, Count:=1
+            Selection.ParagraphFormat.Alignment = wdAlignParagraphCenter
+            ActiveDocument.Tables.Add Range:=Selection.Range, NumRows:=1, NumColumns:=1, DefaultTableBehavior:=wdWord9TableBehavior, AutoFitBehavior:=wdAutoFitFixed
+            With Selection.Tables(1)
+                If .Style <> "Table Grid" Then
+                    .Style = "Table Grid"
+                End If
+                .ApplyStyleHeadingRows = True
+                .ApplyStyleLastRow = False
+                .ApplyStyleFirstColumn = True
+                .ApplyStyleLastColumn = False
+                .ApplyStyleRowBands = True
+                .ApplyStyleColumnBands = False
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+            Selection.MoveDown Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Cut
+            Selection.MoveLeft Unit:=wdCharacter, Count:=2
+            Selection.PasteAndFormat (wdPasteDefault)
+            Selection.TypeBackspace
+            Selection.MoveUp Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Color = -587137025
+            Selection.MoveRight Unit:=wdCharacter, Count:=1
+            Selection.Tables(1).Rows.Alignment = wdAlignRowRight
+            Selection.Tables(1).Columns(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Tables(1).Columns(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.Range.Cells(1).VerticalAlignment = wdCellAlignVerticalCenter
+            Selection.Range.Cells(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Range.Cells(1).PreferredWidth = InchesToPoints(2.65)
+            With Selection.Tables(1)
+                With .Shading
+                    .Texture = wdTextureNone
+                    .ForegroundPatternColor = wdColorAutomatic
+                    .BackgroundPatternColor = -603914241
+                End With
+                With .Borders(wdBorderLeft)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderRight)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderTop)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderBottom)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+                .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+                .Borders.Shadow = False
+            End With
+            With Options
+                .DefaultBorderLineStyle = wdLineStyleThinThickSmallGap
+                .DefaultBorderLineWidth = wdLineWidth300pt
+                .DefaultBorderColor = -587137025
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+        End If  'End If Selection.Find.Found
+
+    Next i  ' Go to the next iteration of the loop
+
+End Sub
