@@ -135,7 +135,7 @@ def start_conversion():
         log_message("Error: Please select a directory.", "error") #use log_message
         return
 
-    path = rf"{base_directory}\TXT files\Macro_DirectCertifyQA.txt"
+    path = rf"{base_directory}\TXT files\Macro_1.txt"
 
     if os.path.exists(path):
         print("The file exists!")
