@@ -71,7 +71,7 @@ def apply_formatting(index, filepath):
     print(f"location of word file: {word_file}")   
 
     try:
-        macro_file_path = os.path.join(os.path.dirname(filepath), "TXT files", "Macro_DirectCertifyQA.txt")
+        macro_file_path = os.path.join(os.path.dirname(filepath), "TXT files", "Macro_1.txt")
         with open(macro_file_path, "r", encoding="utf-8") as file:
             macro_code = file.read()
             #logging.info(f"Macro file successfully loaded from: {macro_file_path}")
