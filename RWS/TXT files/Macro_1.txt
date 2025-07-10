@@ -1,0 +1,224 @@
+Sub DirectCertifyQA()
+
+'
+' DirectCertifyQA Macro - Processes "Question:" and "Answer:" sections
+' The loop now runs until no more "Question:" sections are found from the current position to the end of the document.
+' This version fixes the Error 5907 by preventing the search from wrapping around.
+'
+    Dim foundQuestion As Boolean
+
+    ' Perform an initial search for "Question:" to set up the While loop condition.
+    ' This ensures the loop runs at least once if a "Question:" is found at the beginning.
+    ' Use wdFindStop to prevent wrapping for the initial check.
+    Selection.Find.ClearFormatting
+    With Selection.Find
+        .Text = "Question: "
+        .Replacement.Text = ""
+        .Forward = True
+        .Wrap = wdFindStop ' IMPORTANT: Changed to wdFindStop to prevent wrapping
+        .Format = False
+        .MatchCase = False
+        .MatchWholeWord = False
+        .MatchWildcards = False
+        .MatchSoundsLike = False
+        .MatchAllWordForms = False
+    End With
+    Selection.Find.Execute
+    foundQuestion = Selection.Find.Found ' Set the flag based on whether "Question:" was found
+
+    ' The While loop continues as long as a "Question:" is found within the remaining document.
+    While foundQuestion
+
+        ' --- Start processing "Question:" section ---
+        ' This If block is technically redundant because 'foundQuestion' already confirms a match,
+        ' but it's kept to preserve the original structure of the code within the loop.
+        If Selection.Find.Found Then
+            Selection.MoveLeft Unit:=wdCharacter, Count:=1
+            Selection.ParagraphFormat.Alignment = wdAlignParagraphCenter
+            ActiveDocument.Tables.Add Range:=Selection.Range, NumRows:=1, NumColumns:=1, DefaultTableBehavior:=wdWord9TableBehavior, AutoFitBehavior:=wdAutoFitFixed
+            With Selection.Tables(1)
+                If .Style <> "Table Grid" Then
+                    .Style = "Table Grid"
+                End If
+                .ApplyStyleHeadingRows = True
+                .ApplyStyleLastRow = False
+                .ApplyStyleFirstColumn = True
+                .ApplyStyleLastColumn = False
+                .ApplyStyleRowBands = True
+                .ApplyStyleColumnBands = False
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+            Selection.MoveDown Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Cut
+            Selection.MoveLeft Unit:=wdWord, Count:=1
+            Selection.MoveUp Unit:=wdParagraph, Count:=1
+            Selection.PasteAndFormat (wdPasteDefault)
+            Selection.TypeBackspace
+            Selection.MoveUp Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Color = -603914241 ' Original color for Question
+            Selection.MoveRight Unit:=wdCharacter, Count:=1
+            With Selection.Tables(1)
+                With .Shading
+                    .Texture = wdTextureNone
+                    .ForegroundPatternColor = wdColorAutomatic
+                    .BackgroundPatternColor = -603946753 ' Background color for Question table
+                End With
+                With .Borders(wdBorderLeft)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderRight)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderTop)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                With .Borders(wdBorderBottom)
+                    .LineStyle = wdLineStyleThinThickSmallGap
+                    .LineWidth = wdLineWidth300pt
+                    .Color = -603914241
+                End With
+                .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+                .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+                .Borders.Shadow = False
+            End With
+            With Options
+                .DefaultBorderLineStyle = wdLineStyleThinThickSmallGap
+                .DefaultBorderLineWidth = wdLineWidth300pt
+                .DefaultBorderColor = -603914241
+            End With
+            Selection.Tables(1).Columns(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Tables(1).Columns(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.Range.Cells(1).VerticalAlignment = wdCellAlignVerticalCenter
+            Selection.Range.Cells(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Range.Cells(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.MoveRight Unit:=wdWord, Count:=2
+        End If 'End If Selection.Find.Found
+        ' --- End processing "Question:" section ---
+
+        ' --- Start processing "Answer:" section ---
+        Selection.Find.ClearFormatting
+        With Selection.Find
+            .Text = "Answer: "
+            .Replacement.Text = ""
+            .Forward = True
+            .Wrap = wdFindStop ' IMPORTANT: Changed to wdFindStop
+            .Format = False
+            .MatchCase = False
+            .MatchWholeWord = False
+            .MatchWildcards = False
+            .MatchSoundsLike = False
+            .MatchAllWordForms = False
+        End With
+
+        Selection.Find.Execute
+        If Selection.Find.Found Then
+            Selection.MoveLeft Unit:=wdCharacter, Count:=1
+            Selection.ParagraphFormat.Alignment = wdAlignParagraphCenter
+            ActiveDocument.Tables.Add Range:=Selection.Range, NumRows:=1, NumColumns:=1, DefaultTableBehavior:=wdWord9TableBehavior, AutoFitBehavior:=wdAutoFitFixed
+            With Selection.Tables(1)
+                If .Style <> "Table Grid" Then
+                    .Style = "Table Grid"
+                End If
+                .ApplyStyleHeadingRows = True
+                .ApplyStyleLastRow = False
+                .ApplyStyleFirstColumn = True
+                .ApplyStyleLastColumn = False
+                .ApplyStyleRowBands = True
+                .ApplyStyleColumnBands = False
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+            Selection.MoveDown Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Cut
+            Selection.MoveLeft Unit:=wdCharacter, Count:=2
+            Selection.PasteAndFormat (wdPasteDefault)
+            Selection.TypeBackspace
+            Selection.MoveUp Unit:=wdParagraph, Count:=1, Extend:=wdExtend
+            Selection.Font.Bold = wdToggle
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Size = Selection.Font.Size + 1
+            Selection.Font.Bold = wdToggle ' Toggles bold twice, effectively undoing the first toggle
+            Selection.Font.Bold = wdToggle ' Toggles bold again, making it bold
+            Selection.Font.Color = -587137025 ' Original color for Answer
+            Selection.MoveRight Unit:=wdCharacter, Count:=1
+            Selection.Tables(1).Rows.Alignment = wdAlignRowRight
+            Selection.Tables(1).Columns(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Tables(1).Columns(1).PreferredWidth = InchesToPoints(2.65)
+            Selection.Range.Cells(1).VerticalAlignment = wdCellAlignVerticalCenter
+            Selection.Range.Cells(1).PreferredWidthType = wdPreferredWidthPoints
+            Selection.Range.Cells(1).PreferredWidth = InchesToPoints(2.65)
+            With Selection.Tables(1)
+                With .Shading
+                    .Texture = wdTextureNone
+                    .ForegroundPatternColor = wdColorAutomatic
+                    .BackgroundPatternColor = -603914241 ' Background color for Answer table
+                End With
+                With .Borders(wdBorderLeft)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderRight)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderTop)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                With .Borders(wdBorderBottom)
+                    .LineStyle = wdLineStyleSingle
+                    .LineWidth = wdLineWidth050pt
+                    .Color = -587137025
+                End With
+                .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
+                .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
+                .Borders.Shadow = False
+            End With
+            With Options
+                .DefaultBorderLineStyle = wdLineStyleThinThickSmallGap
+                .DefaultBorderLineWidth = wdLineWidth300pt
+                .DefaultBorderColor = -587137025
+            End With
+            Selection.MoveRight Unit:=wdWord, Count:=2
+        End If  'End If Selection.Find.Found
+        ' --- End processing "Answer:" section ---
+
+        ' Re-search for the next "Question:" to determine if the loop should continue.
+        ' IMPORTANT: Use wdFindStop here to ensure the loop terminates when the end of the document is reached.
+        Selection.Find.ClearFormatting
+        With Selection.Find
+            .Text = "Question: "
+            .Replacement.Text = ""
+            .Forward = True
+            .Wrap = wdFindStop ' IMPORTANT: Changed to wdFindStop
+            .Format = False
+            .MatchCase = False
+            .MatchWholeWord = False
+            .MatchWildcards = False
+            .MatchSoundsLike = False
+            .MatchAllWordForms = False
+        End With
+        Selection.Find.Execute
+        foundQuestion = Selection.Find.Found ' Update the flag for the next loop iteration
+
+    Wend ' End of While loop
+
+End Sub

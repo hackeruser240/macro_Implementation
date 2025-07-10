@@ -1,4 +1,0 @@
-checklist
-
-1. No hyphens (-) in MS Word filenames
-2. No macro named "DirectCertifyQA" in MS Word

@@ -1,0 +1,6 @@
+checklist
+
+1. No hyphens (-) in MS Word filenames
+2. No macro named "DirectCertifyQA" in MS Word. Please remove macros with this name
+3. Place Macro_1.txt in "TXT Files\Macro_1.txt"
+4. Word files are saved in ".docm" format
